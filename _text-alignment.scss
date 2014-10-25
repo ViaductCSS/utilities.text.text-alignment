@@ -1,31 +1,44 @@
 // =============================
-// Text Alignment Utility Helper Classes
+// Enable Private Variables
 // =============================
 
-// Un-namespaced Classes are to be used globally when an elements alignment is consistant across all viewports. 
-
-.text-left   { text-align: left   }
-.text-right  { text-align: right  }
-.text-center { text-align: center }
+$_text-alignment-enable:          true !default;
+$_viewport-text-alignment-enable: true !default;
 
 // =============================
-// Viewport Text Alignment Utility Helper Attributes
+// Core Text Alignment Utility Helper Classes
 // =============================
 
-// Viewport Text Alignment Utility Helper Attributes are generated via the below function to namespace attributes 
-// for certain viewports.
+// Un-namespaced Classes are to be used globally when an elements alignment is consistant across all viewports.
+
+@if ($_text-alignment-enable) {
+	.text-left,   %text-left   { text-align: left   !important }
+	.text-right,  %text-right  { text-align: right  !important }
+	.text-center, %text-center { text-align: center !important }
+}
+
+// =============================
+// Core Viewport Text Alignment Utility Helper Attributes
+// =============================
+
+//
+// Viewport Text Alignment Utility Helper Attributes are generated via the below function for certain viewports.
 // The advantage to this, is it allows alignment to be added to a certain element specifically for a breakpoint which you have
 // defined.
-// Example Use - data-desk="desk-text-left" data-lap="lap-text-center".
+// Example Use - data-desk="text-left" data-lap="text-center".
+//
 
-@each $viewport, $breakpoint in $viewport-values {
+@if ($_viewport-text-alignment-enable) {
+	@each $viewport, $breakpoint in $viewport-values {
 
-	// Attributes only apply once certain breakpoint is triggered.
+		// Attributes only apply once certain breakpoint is triggered.
 
-	@include media-query(nth($breakpoint, 1)) {
-		[data-#{$viewport}="text-left"]   { text-align: left   !important; }
-		[data-#{$viewport}="text-right"]  { text-align: right  !important; }
-		[data-#{$viewport}="text-center"] { text-align: center !important; }
+		@include media-query($from: nth($breakpoint, 1),
+		                     $to:   nth($breakpoint, 2)) {
+			[data-#{$viewport}~="text-left"]   { text-align: left   !important }
+			[data-#{$viewport}~="text-right"]  { text-align: right  !important }
+			[data-#{$viewport}~="text-center"] { text-align: center !important }
+		}
+
 	}
-
 }
